@@ -1,5 +1,14 @@
 import { Stack } from "expo-router";
+import { MoneyProvider } from "./MoneyContext";
 
 export default function RootLayout() {
-  return <Stack/>;
+  return(
+    <MoneyProvider>
+      <Stack 
+        screenOptions={{
+          headerShown: false
+        }}
+      />
+    </MoneyProvider>
+  )
 }

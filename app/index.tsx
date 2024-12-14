@@ -1,17 +1,22 @@
 import { Link } from "expo-router";
 import { useState } from "react"
 import {StyleSheet, View, Text, TouchableOpacity } from "react-native"
+import {useMoney} from "./MoneyContext";
 
 export default function Index() {
 
-  const [money, setMoney] = useState(0)
-  const [add, setAdd] = useState(1)
+  const { money, setMoney, level } = useMoney();
+
+  const add = level**2
 
 
   return <View style={Styles.content}>
-    <Text style={Styles.h1}>Welcome to Money!</Text>
+    <Text style={Styles.h1}>Welcome to Home !</Text>
 
-    <Text style={Styles.h2}>Money = {money}$</Text>
+    <View style={Styles.inf}>
+      <Text style={Styles.h2}>Money = {money}$</Text>
+      <Text style={Styles.h2}>Level = {level}</Text>
+    </View>
 
     <TouchableOpacity
       style={Styles.button}
@@ -70,5 +75,12 @@ const Styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center"
+  },
+
+  inf : {
+    display: "flex",
+    flexDirection: "column",
+    gap: 20,
+    alignItems: "center",
   }
 });
