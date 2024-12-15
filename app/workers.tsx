@@ -25,6 +25,12 @@ export default function () {
   
   const [workers, setWorkers] = useState(initialWorkers);
 
+  const formatNumber = (number) => {
+    return number
+      .toFixed(0) // Limite à deux décimales
+      .replace(/\B(?=(\d{3})+(?!\d))/g, " "); // Ajoute un espace tous les 3 chiffres
+  };
+
   const updateWorkerById = (id) => {
     setWorkers( (prevWorkers) =>
       prevWorkers.map( (worker) => 
@@ -95,7 +101,7 @@ export default function () {
               Welcome to Workers !  
             </Text>
             <Text style={Styles.h2}>
-               Money : {money}$
+               Money : {formatNumber(money)}$
             </Text>
           </View>
 
@@ -120,8 +126,8 @@ export default function () {
                     }}
                   >
                     <Text style={Styles.h3}>{worker.name} {worker.id}</Text>
-                    <Text style={Styles.h3}>{worker.give}$/s</Text>
-                    <Text style={Styles.h3}>{worker.cost}$</Text>
+                    <Text style={Styles.h3}>{formatNumber(worker.give)}$/s</Text>
+                    <Text style={Styles.h3}>{formatNumber(worker.cost)}$</Text>
                   </TouchableOpacity>
                 ))
               }

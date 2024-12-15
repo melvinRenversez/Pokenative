@@ -7,6 +7,12 @@ export default function Shop() {
     const { money, setMoney, level, setLevel } = useMoney();
   
     const updatePrice = 10 + (level ** level) / (level ** 2);
+
+    const formatNumber = (number) => {
+      return number
+        .toFixed(0) // Limite à deux décimales
+        .replace(/\B(?=(\d{3})+(?!\d))/g, " "); // Ajoute un espace tous les 3 chiffres
+    };
   
     if (money === undefined || level === undefined) {
       console.log("Error: invalid state in Shop");
@@ -18,7 +24,7 @@ export default function Shop() {
         <Text style={Styles.h1}>Welcome to Shop !</Text>
   
         <View style={Styles.inf}>
-          <Text style={Styles.h2}>Money = {parseFloat(money.toFixed(2))} </Text>
+          <Text style={Styles.h2}>Money = {formatNumber(money)} $</Text>
           <Text style={Styles.h2}>Level = {level}</Text>
         </View>
   
@@ -31,7 +37,7 @@ export default function Shop() {
             }
           }}
         >
-          <Text style={Styles.h3}>Update for {updatePrice}$</Text>
+          <Text style={Styles.h3}>Update for {formatNumber(updatePrice)}$</Text>
         </TouchableOpacity>
   
         <View style={Styles.bottom}>

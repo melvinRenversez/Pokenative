@@ -6,7 +6,14 @@ import { useMoney } from "./MoneyContext";
 export default function Home() {
   const { money, setMoney, level } = useMoney();
 
-const add = parseFloat((level ** level / (level ** 4)).toFixed(2));
+  const add = parseFloat((level ** level / (level ** 4)).toFixed(2));
+
+  const formatNumber = (number) => {
+    return number
+      .toFixed(0) // Limite à deux décimales
+      .replace(/\B(?=(\d{3})+(?!\d))/g, " "); // Ajoute un espace tous les 3 chiffres
+  };
+  
 
   if (money === undefined || level === undefined) {
     console.log("Error: invalid state in Home");
@@ -18,7 +25,7 @@ const add = parseFloat((level ** level / (level ** 4)).toFixed(2));
       <Text style={Styles.h1}>Welcome to Home !</Text>
 
       <View style={Styles.inf}>
-        <Text style={Styles.h2}>Money = {parseFloat(money.toFixed(2))}$</Text>
+        <Text style={Styles.h2}>Money = {formatNumber(money)}$</Text>
         <Text style={Styles.h2}>Level = {level}</Text>
       </View>
 
@@ -28,7 +35,7 @@ const add = parseFloat((level ** level / (level ** 4)).toFixed(2));
           setMoney(money + add);
         }}
       >
-        <Text style={Styles.h2}>Add {add}$</Text>
+        <Text style={Styles.h2}>Add {formatNumber(add)}$</Text>
       </TouchableOpacity>
 
       <View style={Styles.bottom}>
