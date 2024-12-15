@@ -6,7 +6,7 @@ import { useMoney } from "./MoneyContext";
 export default function Home() {
   const { money, setMoney, level } = useMoney();
 
-  const add = level ** 3;
+const add = parseFloat((level ** level / (level ** 4)).toFixed(2));
 
   useEffect(() => {
     console.log("Home component rendered");
@@ -24,7 +24,7 @@ export default function Home() {
       <Text style={Styles.h1}>Welcome to Home !</Text>
 
       <View style={Styles.inf}>
-        <Text style={Styles.h2}>Money = {money}$</Text>
+        <Text style={Styles.h2}>Money = {parseFloat(money.toFixed(2))}$</Text>
         <Text style={Styles.h2}>Level = {level}</Text>
       </View>
 
@@ -38,8 +38,9 @@ export default function Home() {
       </TouchableOpacity>
 
       <View style={Styles.bottom}>
-        <Link href="/" style={Styles.h3}>Home</Link>
-        <Link href="/shop" style={Styles.h3}>Shop</Link>
+        <Link href="/" style={Styles.link}>Home</Link>
+        <Link href="/workers" style={Styles.link}>Workers</Link>
+        <Link href="/shop" style={Styles.link}>Shop</Link>
       </View>
     </View>
   );
@@ -92,4 +93,11 @@ const Styles = StyleSheet.create({
     gap: 20,
     alignItems: "center",
   },
+
+  link: {
+    fontSize: 20,
+    height: "100%",
+    lineHeight: 80,
+    textAlign: "center"
+  }
 });

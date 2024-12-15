@@ -25,7 +25,7 @@ export default function Shop() {
         <Text style={Styles.h1}>Welcome to Shop !</Text>
   
         <View style={Styles.inf}>
-          <Text style={Styles.h2}>Money = {money} </Text>
+          <Text style={Styles.h2}>Money = {parseFloat(money.toFixed(2))} </Text>
           <Text style={Styles.h2}>Level = {level}</Text>
         </View>
   
@@ -42,8 +42,9 @@ export default function Shop() {
         </TouchableOpacity>
   
         <View style={Styles.bottom}>
-          <Link href="/" style={Styles.h3}>Home</Link>
-          <Link href="/shop" style={Styles.h3}>Shop</Link>
+          <Link href="/" style={Styles.link}>Home</Link>
+          <Link href="/workers" style={Styles.link}>Workers</Link>
+          <Link href="/shop" style={Styles.link}>Shop</Link>
         </View>
       </View>
     );
@@ -57,7 +58,7 @@ const Styles = StyleSheet.create({
     fontSize: 27,
   },
   h3: {
-    fontSize: 20,
+    fontSize: 20
   },
   content: {
     backgroundColor: "#FF00FF",
@@ -96,4 +97,11 @@ const Styles = StyleSheet.create({
     gap: 20,
     alignItems: "center",
   },
+
+  link: {
+    fontSize: 20,
+    height: "100%",
+    lineHeight: 80,
+    textAlign: "center"
+  }
 });
