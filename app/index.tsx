@@ -8,12 +8,6 @@ export default function Home() {
 
 const add = parseFloat((level ** level / (level ** 4)).toFixed(2));
 
-  useEffect(() => {
-    console.log("Home component rendered");
-    console.log("Current money:", money);
-    console.log("Current level:", level);
-  }, [money, level]);
-
   if (money === undefined || level === undefined) {
     console.log("Error: invalid state in Home");
     return <Text style={Styles.h1}>Loading...</Text>;  // Affiche un message pendant le chargement

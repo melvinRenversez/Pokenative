@@ -2,6 +2,7 @@ import { Link } from "expo-router";
 import {StyleSheet, View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useMoney } from "./MoneyContext"; 
 import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initialWorkers = [
   {id: 1, name: "worker", level: 0, give: 0, cost: 0},
@@ -42,9 +43,33 @@ export default function () {
   }
 
   useEffect(() => {
+    const saveWorkers = async () => {
+      try {
+        await AsyncStorage.setItem("workers", JSON.stringify(workers))
+      }catch (error) {
+        console.error(error);
+      }
+    }
+  }, [workers]);
+
+  useEffect(() => {
+    const getWorkers = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem("workers");
+        console.log(jsonValue);
+        if (jsonValue!== null) {
+          setWorkers(JSON.parse(jsonValue));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getWorkers();
+  }, []);
+
+  useEffect(() => {
 
     const interval = setInterval(() => {
-      console.log("Ajout d'argent");
 
       workers.forEach((worker) => {
         if (worker.give > 0) {

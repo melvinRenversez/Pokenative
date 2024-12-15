@@ -8,13 +8,6 @@ export default function Shop() {
   
     const updatePrice = 10 + (level ** level) / (level ** 2);
   
-    useEffect(() => {
-      console.log("Shop component rendered");
-      console.log("Current money:", money);
-      console.log("Current level:", level);
-      console.log("Update price:", updatePrice);
-    }, [money, level]);
-  
     if (money === undefined || level === undefined) {
       console.log("Error: invalid state in Shop");
       return <Text style={Styles.h1}>Loading...</Text>;  // Affiche un message pendant le chargement

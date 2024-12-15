@@ -1,4 +1,5 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 interface MoneyContextType {
   money: number;
@@ -10,13 +11,42 @@ interface MoneyContextType {
 const MoneyContext = createContext<MoneyContextType | undefined>(undefined);
 
 export const MoneyProvider = ({ children }: { children: React.ReactNode }) => {
-  const [money, setMoney] = useState(100);
-  const [level, setLevel] = useState(1);
+  const [money, setMoney] = useState(0);
+  const [level, setLevel] = useState(0);
 
-  // Logs pour vérifier l'initialisation de l'état
-  console.log("MoneyProvider initialized");
-  console.log("Initial money:", money);
-  console.log("Initial level:", level);
+  useEffect(() => {
+    const saveMoney = async () => {
+      try {
+        await AsyncStorage.setItem("money", String(money));
+        await AsyncStorage.setItem("level", String(level));
+        console.log("Money and level saved to async storage");
+      }catch (error) {
+        console.error("Error saving money to async storage", error);
+      }
+    }
+
+    saveMoney()
+  })
+
+  useEffect(() => {
+    const getMoney = async () => {
+      try {
+
+        const storedMoney = await AsyncStorage.getItem("money");
+        const storedLevel = await AsyncStorage.getItem("level");
+
+        setMoney(Number(storedMoney) || 100);
+        setLevel(Number(storedLevel) || 1);
+
+        console.log("Money and level loaded from async storage");
+
+      }catch (error) {
+        console.error("Error getting money from async storage", error);
+      }
+    }
+
+    getMoney();
+  }, [])
 
   return (
     <MoneyContext.Provider value={{ money, setMoney, level, setLevel }}>
