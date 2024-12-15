@@ -1,52 +1,61 @@
 import { Link } from "expo-router";
-import { useState } from "react"
-import {StyleSheet, View, Text, TouchableOpacity } from "react-native"
-import {useMoney} from "./MoneyContext";
+import { useState, useEffect } from "react";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { useMoney } from "./MoneyContext";
 
-export default function Index() {
-
+export default function Home() {
   const { money, setMoney, level } = useMoney();
 
-  const add = level**2
+  const add = level ** 3;
 
+  useEffect(() => {
+    console.log("Home component rendered");
+    console.log("Current money:", money);
+    console.log("Current level:", level);
+  }, [money, level]);
 
-  return <View style={Styles.content}>
-    <Text style={Styles.h1}>Welcome to Home !</Text>
+  if (money === undefined || level === undefined) {
+    console.log("Error: invalid state in Home");
+    return <Text style={Styles.h1}>Loading...</Text>;  // Affiche un message pendant le chargement
+  }
 
-    <View style={Styles.inf}>
-      <Text style={Styles.h2}>Money = {money}$</Text>
-      <Text style={Styles.h2}>Level = {level}</Text>
+  return (
+    <View style={Styles.content}>
+      <Text style={Styles.h1}>Welcome to Home !</Text>
+
+      <View style={Styles.inf}>
+        <Text style={Styles.h2}>Money = {money}$</Text>
+        <Text style={Styles.h2}>Level = {level}</Text>
+      </View>
+
+      <TouchableOpacity
+        style={Styles.button}
+        onPress={() => {
+          setMoney(money + add);
+        }}
+      >
+        <Text style={Styles.h2}>Add {add}$</Text>
+      </TouchableOpacity>
+
+      <View style={Styles.bottom}>
+        <Link href="/" style={Styles.h3}>Home</Link>
+        <Link href="/shop" style={Styles.h3}>Shop</Link>
+      </View>
     </View>
-
-    <TouchableOpacity
-      style={Styles.button}
-      onPress={ () => setMoney(money + add)}
-    >
-
-      <Text style={Styles.h2}>Add {add}$</Text>
-    </TouchableOpacity>
-
-
-    <View style={Styles.bottom}>
-      <Link href='/' style={Styles.h3}>Home</Link>
-      <Link href='/shop' style={Styles.h3}>Shop</Link>
-    </View>
-
-  </View>
+  );
 }
 
-
 const Styles = StyleSheet.create({
-  h1 : {
-    fontSize: 37
+  h1: {
+    fontSize: 37,
   },
-  h2 : {
-    fontSize: 27
+  h2: {
+    fontSize: 27,
   },
-  h3 : {
-    fontSize: 20
+  h3: {
+    fontSize: 20,
   },
-  content : {
+  content: {
     backgroundColor: "#FF00FF",
     display: "flex",
     gap: 20,
@@ -56,31 +65,31 @@ const Styles = StyleSheet.create({
     paddingBottom: 90,
   },
 
-  button : {
+  button: {
     width: 300,
     backgroundColor: "red",
     display: "flex",
     alignItems: "center",
     padding: 20,
-    borderRadius: 20
+    borderRadius: 20,
   },
 
-  bottom : {
+  bottom: {
     backgroundColor: "orange",
     width: "100%",
     height: 80,
     position: "absolute",
-    bottom : 0,
+    bottom: 0,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    alignItems: "center"
+    alignItems: "center",
   },
 
-  inf : {
+  inf: {
     display: "flex",
     flexDirection: "column",
     gap: 20,
     alignItems: "center",
-  }
+  },
 });
