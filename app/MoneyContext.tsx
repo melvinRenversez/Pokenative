@@ -15,20 +15,6 @@ export const MoneyProvider = ({ children }: { children: React.ReactNode }) => {
   const [level, setLevel] = useState(0);
 
   useEffect(() => {
-    const saveMoney = async () => {
-      try {
-        await AsyncStorage.setItem("money", String(money));
-        await AsyncStorage.setItem("level", String(level));
-        console.log("Money and level saved to async storage");
-      }catch (error) {
-        console.error("Error saving money to async storage", error);
-      }
-    }
-
-    saveMoney()
-  })
-
-  useEffect(() => {
     const getMoney = async () => {
       try {
 
@@ -47,6 +33,20 @@ export const MoneyProvider = ({ children }: { children: React.ReactNode }) => {
 
     getMoney();
   }, [])
+
+  useEffect(() => {
+    const saveMoney = async () => {
+      try {
+        await AsyncStorage.setItem("money", String(money));
+        await AsyncStorage.setItem("level", String(level));
+        console.log("Money and level saved to async storage");
+      }catch (error) {
+        console.error("Error saving money to async storage", error);
+      }
+    }
+
+    saveMoney()
+  }, [money, level])
 
   return (
     <MoneyContext.Provider value={{ money, setMoney, level, setLevel }}>

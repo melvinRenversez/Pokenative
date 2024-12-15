@@ -18,7 +18,6 @@ const initialWorkers = [
   {id: 11, name: "worker", level: 0, give: 0, cost: 0}
 ]
 
-
 export default function () {
   
   const { money, setMoney } = useMoney();
@@ -43,16 +42,6 @@ export default function () {
   }
 
   useEffect(() => {
-    const saveWorkers = async () => {
-      try {
-        await AsyncStorage.setItem("workers", JSON.stringify(workers))
-      }catch (error) {
-        console.error(error);
-      }
-    }
-  }, [workers]);
-
-  useEffect(() => {
     const getWorkers = async () => {
       try {
         const jsonValue = await AsyncStorage.getItem("workers");
@@ -66,6 +55,17 @@ export default function () {
     }
     getWorkers();
   }, []);
+
+  useEffect(() => {
+    const saveWorkers = async () => {
+      try {
+        await AsyncStorage.setItem("workers", JSON.stringify(workers))
+      }catch (error) {
+        console.error(error);
+      }
+    }
+    saveWorkers();
+  }, [workers]);
 
   useEffect(() => {
 
