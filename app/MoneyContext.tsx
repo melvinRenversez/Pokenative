@@ -10,7 +10,7 @@ interface MoneyContextType {
 const MoneyContext = createContext<MoneyContextType | undefined>(undefined);
 
 export const MoneyProvider = ({ children }: { children: React.ReactNode }) => {
-  const [money, setMoney] = useState(0);
+  const [money, setMoney] = useState(100);
   const [level, setLevel] = useState(1);
 
   // Logs pour vérifier l'initialisation de l'état

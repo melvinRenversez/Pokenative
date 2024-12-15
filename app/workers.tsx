@@ -1,43 +1,114 @@
 import { Link } from "expo-router";
-import {StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import {StyleSheet, View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { useMoney } from "./MoneyContext"; 
+import { useEffect, useState } from "react";
+
+const initialWorkers = [
+  {id: 1, name: "worker", level: 0, give: 0, cost: 0},
+  {id: 2, name: "worker", level: 0, give: 0, cost: 0},
+  {id: 3, name: "worker", level: 0, give: 0, cost: 0},
+  {id: 4, name: "worker", level: 0, give: 0, cost: 0},
+  {id: 5, name: "worker", level: 0, give: 0, cost: 0},
+  {id: 6, name: "worker", level: 0, give: 0, cost: 0},
+  {id: 7, name: "worker", level: 0, give: 0, cost: 0},
+  {id: 8, name: "worker", level: 0, give: 0, cost: 0},
+  {id: 9, name: "worker", level: 0, give: 0, cost: 0},
+  {id: 10, name: "worker", level: 0, give: 0, cost: 0},
+  {id: 11, name: "worker", level: 0, give: 0, cost: 0}
+]
+
 
 export default function () {
-    return (
-        <View style={Styles.content}>
-            <View style={Styles.top}>
-              <Text style={Styles.h1}>
-                Welcome to Workers !  
-              </Text>
-              <Text style={Styles.h2}>
-                Money : 0
-              </Text>
-            </View>
+  
+  const { money, setMoney } = useMoney();
+  
+  const [workers, setWorkers] = useState(initialWorkers);
 
-            <View style={Styles.workers}>
-                <TouchableOpacity style={Styles.worker}>
-                    <Text style={Styles.h3}>Worker 1</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={Styles.worker}>
-                    <Text style={Styles.h3}>Worker 1</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={Styles.worker}>
-                    <Text style={Styles.h3}>Worker 1</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={Styles.worker}>
-                    <Text style={Styles.h3}>Worker 1</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={Styles.worker}>
-                    <Text style={Styles.h3}>Worker 1</Text>
-                </TouchableOpacity>
-            </View>
-    
-          <View style={Styles.bottom}>
-            <Link href="/" style={Styles.link}>Home</Link>
-            <Link href="/workers" style={Styles.link}>Workers</Link>
-            <Link href="/shop" style={Styles.link}>Shop</Link>
+  const updateWorkerById = (id) => {
+    setWorkers( (prevWorkers) =>
+      prevWorkers.map( (worker) => 
+        worker.id == id
+          ? {
+            ...worker,
+            level: worker.level + 1,
+            give : worker.level === 0 
+              ? 0
+              : 2 +  worker.id * ( worker.level + 1) * worker.id * worker.level,
+            cost : 12 * (worker.level + 1) * worker.id**3 * (worker.level + 1) ** 2
+          }
+        : worker
+      )
+    )
+  }
+
+  useEffect(() => {
+
+    const interval = setInterval(() => {
+      console.log("Ajout d'argent");
+
+      workers.forEach((worker) => {
+        if (worker.give > 0) {
+          setMoney((prevMoney) => prevMoney + worker.give);
+        }
+      });
+
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [workers, setMoney]);
+
+  useEffect(() => {
+    initialWorkers.forEach( (worker) => {
+      updateWorkerById(worker.id)
+    })
+  }, []);
+
+  return (
+      <View style={Styles.content}>
+        <View style={Styles.top}>
+          <Text style={Styles.h1}>
+              Welcome to Workers !  
+            </Text>
+            <Text style={Styles.h2}>
+               Money : {money}$
+            </Text>
           </View>
+
+          
+          <ScrollView
+            style={Styles.workers}
+            showsVerticalScrollIndicator={false}
+          >
+              {
+                workers.map((worker) => (
+                  <TouchableOpacity 
+                    key={worker.id} 
+                    style={[worker.level == 0 ? [Styles.worker, Styles.workerDisabled] : Styles.worker, 
+                      {
+                        marginBottom: 20
+                      }]}
+                    onPress={ () => {
+                      if ( money >= worker.cost){
+                        setMoney(money - worker.cost)
+                        updateWorkerById(worker.id)
+                      }
+                    }}
+                  >
+                    <Text style={Styles.h3}>{worker.name} {worker.id}</Text>
+                    <Text style={Styles.h3}>{worker.give}$/s</Text>
+                    <Text style={Styles.h3}>{worker.cost}$</Text>
+                  </TouchableOpacity>
+                ))
+              }
+          </ScrollView>
+    
+        <View style={Styles.bottom}>
+          <Link href="/" style={Styles.link}>Home</Link>
+          <Link href="/workers" style={Styles.link}>Workers</Link>
+          <Link href="/shop" style={Styles.link}>Shop</Link>
         </View>
-      );  
+      </View>
+    );  
 }
 
 
@@ -107,7 +178,9 @@ const Styles = StyleSheet.create({
     flex: 1,
     display: "flex",
     gap: 20,
-    width: "90%"
+    width: "90%",
+    overflowY: "scroll",
+    padding: 10
   },
   worker: {
     backgroundColor: "orange",
@@ -116,7 +189,11 @@ const Styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    padding: 10
+    justifyContent: "space-between",
+    padding: 10,
+  },
+  workerDisabled: {
+    backgroundColor: "gray",
+    opacity: 0.5
   }
 });
